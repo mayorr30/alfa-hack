@@ -97,6 +97,7 @@ class AssessmentOut(BaseModel):
     notes: list[str]
     requires_manual_review: bool
     manual_review_flags: list[str]
+    features: Optional[dict] = Field(None, description="Признаки, на которых считала модель")
     model_version: str
     policy_version: str
     assessed_at: datetime

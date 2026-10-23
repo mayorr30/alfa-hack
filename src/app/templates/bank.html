@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Кабинет кредитного аналитика</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', path='app.css') }}">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="brand-mark" aria-hidden="true"></span>Кредитный кабинет</div>
+  <nav aria-label="Разделы">
+    <a href="/">Кабинет клиента</a>
+    <a href="/bank" aria-current="page">Кабинет аналитика</a>
+    <a href="/docs">API</a>
+  </nav>
+  <span class="demo-note">Демо на синтетических данных</span>
+</header>
+
+<div class="bank">
+  <main>
+    <h1>Заявки</h1>
+    <p class="lead">Заявки на ручной проверке ждут вашего решения. Остальные можно открыть и посмотреть, как их оценила модель.</p>
+    <div class="filters" id="filters" role="group" aria-label="Фильтр по статусу"></div>
+    <table class="list">
+      <thead><tr><th>№</th><th>Компания</th><th class="num">Сумма</th><th class="hide-sm">Грейд</th><th>Статус</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </main>
+  <aside class="panel" id="panel" aria-live="polite">
+    <p class="empty">Выберите заявку в списке.</p>
+  </aside>
+</div>
+<script src="{{ url_for('static', path='common.js') }}"></script>
+<script src="{{ url_for('static', path='bank.js') }}"></script>
+</body>
+</html>

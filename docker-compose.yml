@@ -1,9 +1,8 @@
-version: '3.8'
-
+# Запуск всего проекта одной командой: docker compose up --build
+# Кабинет клиента: http://localhost:8000/   Аналитик: /bank   Swagger: /docs
 services:
   db:
     image: postgres:15-alpine
-    container_name: alfa_postgres_db
     environment:
       POSTGRES_USER: alfa_user
       POSTGRES_PASSWORD: alfa_password
@@ -12,6 +11,21 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alfa_user -d alfa_credit_db"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://alfa_user:alfa_password@db:5432/alfa_credit_db
+    ports:
+      - "8000:8000"
 
 volumes:
   postgres_data:

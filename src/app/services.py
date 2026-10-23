@@ -108,6 +108,7 @@ def to_out(app: Application) -> ApplicationOut:
             missing_data=r.get("missing_data", []), checks=r.get("checks", []),
             notes=r.get("notes", []), requires_manual_review=r["requires_manual_review"],
             manual_review_flags=r.get("manual_review_flags", []),
+            features=r.get("features"),
             model_version=last.model_version, policy_version=last.policy_version,
             assessed_at=last.created_at,
         )

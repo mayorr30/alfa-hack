@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Кредитный кабинет предпринимателя</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', path='app.css') }}">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="brand-mark" aria-hidden="true"></span>Кредитный кабинет</div>
+  <nav aria-label="Разделы">
+    <a href="/" aria-current="page">Кабинет клиента</a>
+    <a href="/bank">Кабинет аналитика</a>
+    <a href="/docs">API</a>
+  </nav>
+  <span class="demo-note">Демо на синтетических данных</span>
+</header>
+
+<div class="layout">
+  <aside class="rail" aria-label="Шаги заявки">
+    <ol id="rail">
+      <li data-step="company">Компания</li>
+      <li data-step="need">Задача</li>
+      <li data-step="product">Продукт</li>
+      <li data-step="submit">Заявка</li>
+      <li data-step="result">Решение</li>
+    </ol>
+  </aside>
+
+  <main>
+    <!-- 1. Компания -->
+    <section id="step-company">
+      <h1>Кредит для бизнеса</h1>
+      <p class="lead">Укажите компанию — данные из реестра подтянутся сами. Потом расскажите, на что нужны деньги, и мы подберём кредит.</p>
+      <div class="row">
+        <div class="field">
+          <label for="demo">Демо-компания</label>
+          <select id="demo" class="input"><option value="">Выберите компанию…</option></select>
+          <span class="hint">Каждая компания показывает свой сценарий решения</span>
+        </div>
+        <div class="field">
+          <label for="inn">или ИНН</label>
+          <input id="inn" class="input" inputmode="numeric" maxlength="12" placeholder="10 или 12 цифр" autocomplete="off">
+        </div>
+      </div>
+      <button id="loadCompany" class="btn">Найти компанию</button>
+      <div id="companyError" class="error" hidden></div>
+      <dl id="companyCard" class="company kv" hidden></dl>
+    </section>
+
+    <!-- 2. Задача -->
+    <section id="step-need" hidden>
+      <h2>На что нужны деньги</h2>
+      <p class="lead">Опишите задачу своими словами или выберите вариант.</p>
+      <div class="field">
+        <label for="purposeText">Задача</label>
+        <input id="purposeText" class="input" placeholder="Например: купить новую печь для пекарни">
+      </div>
+      <div id="purposeChips" class="chips" role="group" aria-label="Цель кредита"></div>
+      <div class="row">
+        <div class="field">
+          <label for="amount">Сумма, ₽</label>
+          <input id="amount" class="input" type="number" min="1" step="10000" placeholder="5 000 000">
+        </div>
+        <div class="field">
+          <label for="term">Срок, месяцев</label>
+          <input id="term" class="input" type="number" min="1" max="120" placeholder="36">
+        </div>
+      </div>
+      <div class="actions">
+        <button id="findProducts" class="btn btn-primary">Подобрать кредит</button>
+        <button id="fillDemo" class="btn btn-quiet" hidden>Заполнить как в демо-сценарии</button>
+      </div>
+      <div id="needError" class="error" hidden></div>
+    </section>
+
+    <!-- 3. Продукт -->
+    <section id="step-product" hidden>
+      <h2>Подходящие кредиты</h2>
+      <p id="purposeGuess" class="lead"></p>
+      <p id="prescore" class="prescore" hidden></p>
+      <div id="products" class="products"></div>
+      <details id="unfit" class="unfit" hidden><summary></summary><div id="unfitList"></div></details>
+    </section>
+
+    <!-- 4. Заявка -->
+    <section id="step-submit" hidden>
+      <h2>Проверьте заявку</h2>
+      <table class="terms" id="summary"></table>
+      <label class="check">
+        <input id="consent" type="checkbox">
+        <span>Согласен на запрос моей кредитной истории в бюро кредитных историй</span>
+      </label>
+      <details class="more">
+        <summary>Указать выручку вручную (если нет отчётности)</summary>
+        <div class="row">
+          <div class="field">
+            <label for="revenue">Выручка за год, ₽</label>
+            <input id="revenue" class="input" type="number" min="1">
+          </div>
+          <div class="field">
+            <label for="margin">Чистая прибыль, % от выручки</label>
+            <input id="margin" class="input" type="number" min="-100" max="100" step="0.1">
+          </div>
+        </div>
+      </details>
+      <button id="submitApp" class="btn btn-primary">Отправить заявку</button>
+      <div id="submitError" class="error" hidden></div>
+    </section>
+
+    <!-- 5. Решение -->
+    <section id="step-result" hidden aria-live="polite">
+      <div id="sheet"></div>
+    </section>
+
+    <!-- Мои заявки -->
+    <section id="history" hidden>
+      <h2>Заявки компании</h2>
+      <p class="small">Нажмите на заявку, чтобы открыть решение и историю.</p>
+      <table class="list">
+        <thead><tr><th>№</th><th class="num">Сумма</th><th class="num hide-sm">Срок</th><th>Статус</th><th class="hide-sm">Обновлена</th></tr></thead>
+        <tbody id="historyRows"></tbody>
+      </table>
+    </section>
+  </main>
+</div>
+<script src="{{ url_for('static', path='common.js') }}"></script>
+<script src="{{ url_for('static', path='cabinet.js') }}"></script>
+</body>
+</html>
