@@ -1,0 +1,326 @@
+{
+  "as_of": "2026-10-01",
+  "companies": [
+    {
+      "inn": "7756405021",
+      "key": "approve",
+      "expected_decision": "APPROVE",
+      "demo_request": {
+        "purpose": "equipment",
+        "product_code": "EQUIPMENT",
+        "requested_amount": 5000000,
+        "term_months": 36
+      },
+      "egrul": {
+        "inn": "7756405021",
+        "ogrn": "1845928732246",
+        "name": "ООО «Пекарня Колосок» (демо)",
+        "legal_form": "OOO",
+        "status": "active",
+        "registration_date": "2020-03-12",
+        "okved_main": "56.10",
+        "industry": "food",
+        "director": "Смирнова Анна Викторовна (демо)",
+        "region": "Москва",
+        "business_age_months": 78
+      },
+      "fns": {
+        "tax_arrears": false,
+        "mass_address": false,
+        "director_changes_12m": 0,
+        "has_reporting": true,
+        "reporting": {
+          "year": 2025,
+          "annual_revenue": 62000000,
+          "net_margin": 0.14,
+          "revenue_trend": 0.12,
+          "revenue_volatility": 0.12
+        }
+      },
+      "bki": {
+        "consent_required": true,
+        "existing_debt": 4000000,
+        "existing_monthly_payments": 203583,
+        "max_overdue_days_12m": 0,
+        "overdue_count_12m": 0,
+        "inquiries_3m": 1
+      },
+      "statement_profile": null
+    },
+    {
+      "inn": "7741938122",
+      "key": "counter_offer",
+      "expected_decision": "COUNTER_OFFER",
+      "demo_request": {
+        "purpose": "working_capital",
+        "product_code": "WORKING_CAPITAL",
+        "requested_amount": 25000000,
+        "term_months": 12
+      },
+      "egrul": {
+        "inn": "7741938122",
+        "ogrn": "1728440435908",
+        "name": "ООО «ТехноСнаб» (демо)",
+        "legal_form": "OOO",
+        "status": "active",
+        "registration_date": "2019-09-02",
+        "okved_main": "47.19",
+        "industry": "trade",
+        "director": "Волков Игорь Петрович (демо)",
+        "region": "Москва",
+        "business_age_months": 84
+      },
+      "fns": {
+        "tax_arrears": false,
+        "mass_address": false,
+        "director_changes_12m": 0,
+        "has_reporting": true,
+        "reporting": {
+          "year": 2025,
+          "annual_revenue": 85000000,
+          "net_margin": 0.1,
+          "revenue_trend": 0.05,
+          "revenue_volatility": 0.18
+        }
+      },
+      "bki": {
+        "consent_required": true,
+        "existing_debt": 6000000,
+        "existing_monthly_payments": 305375,
+        "max_overdue_days_12m": 0,
+        "overdue_count_12m": 0,
+        "inquiries_3m": 1
+      },
+      "statement_profile": null
+    },
+    {
+      "inn": "773544899576",
+      "key": "request_info",
+      "expected_decision": "REQUEST_INFO",
+      "demo_request": {
+        "purpose": "working_capital",
+        "product_code": "EXPRESS",
+        "requested_amount": 1500000,
+        "term_months": 24
+      },
+      "egrul": {
+        "inn": "773544899576",
+        "ogrn": "179990051871113",
+        "name": "ИП Кузнецова Мария Олеговна (демо)",
+        "legal_form": "IP",
+        "status": "active",
+        "registration_date": "2021-05-20",
+        "okved_main": "96.02",
+        "industry": "services",
+        "director": "Кузнецова Мария Олеговна (демо)",
+        "region": "Москва",
+        "business_age_months": 64
+      },
+      "fns": {
+        "tax_arrears": false,
+        "mass_address": false,
+        "director_changes_12m": 0,
+        "has_reporting": false,
+        "reporting": null
+      },
+      "bki": {
+        "consent_required": true,
+        "existing_debt": 0,
+        "existing_monthly_payments": 0,
+        "max_overdue_days_12m": 0,
+        "overdue_count_12m": 0,
+        "inquiries_3m": 0
+      },
+      "statement_profile": {
+        "monthly_inflow": 1150000,
+        "growth": 0.01,
+        "noise": 0.12,
+        "expense_ratio": 0.82
+      }
+    },
+    {
+      "inn": "7783756068",
+      "key": "manual_review",
+      "expected_decision": "MANUAL_REVIEW",
+      "demo_request": {
+        "purpose": "contract",
+        "product_code": "WORKING_CAPITAL",
+        "requested_amount": 8000000,
+        "term_months": 18
+      },
+      "egrul": {
+        "inn": "7783756068",
+        "ogrn": "1415615375035",
+        "name": "ООО «СтройМонтаж-Плюс» (демо)",
+        "legal_form": "OOO",
+        "status": "active",
+        "registration_date": "2018-11-15",
+        "okved_main": "41.20",
+        "industry": "construction",
+        "director": "Егоров Павел Сергеевич (демо)",
+        "region": "Москва",
+        "business_age_months": 94
+      },
+      "fns": {
+        "tax_arrears": false,
+        "mass_address": true,
+        "director_changes_12m": 1,
+        "has_reporting": true,
+        "reporting": {
+          "year": 2025,
+          "annual_revenue": 95000000,
+          "net_margin": 0.11,
+          "revenue_trend": 0.06,
+          "revenue_volatility": 0.22
+        }
+      },
+      "bki": {
+        "consent_required": true,
+        "existing_debt": 9000000,
+        "existing_monthly_payments": 458062,
+        "max_overdue_days_12m": 0,
+        "overdue_count_12m": 0,
+        "inquiries_3m": 2
+      },
+      "statement_profile": null
+    },
+    {
+      "inn": "7742430652",
+      "key": "decline_stop",
+      "expected_decision": "DECLINE",
+      "demo_request": {
+        "purpose": "working_capital",
+        "product_code": "WORKING_CAPITAL",
+        "requested_amount": 3000000,
+        "term_months": 12
+      },
+      "egrul": {
+        "inn": "7742430652",
+        "ogrn": "1506580351822",
+        "name": "ООО «Вектор-Трейд» (демо)",
+        "legal_form": "OOO",
+        "status": "liquidating",
+        "registration_date": "2017-02-01",
+        "okved_main": "47.19",
+        "industry": "trade",
+        "director": "Павлов Олег Николаевич (демо)",
+        "region": "Москва",
+        "business_age_months": 116
+      },
+      "fns": {
+        "tax_arrears": true,
+        "mass_address": false,
+        "director_changes_12m": 0,
+        "has_reporting": true,
+        "reporting": {
+          "year": 2025,
+          "annual_revenue": 30000000,
+          "net_margin": 0.03,
+          "revenue_trend": -0.25,
+          "revenue_volatility": 0.35
+        }
+      },
+      "bki": {
+        "consent_required": true,
+        "existing_debt": 8000000,
+        "existing_monthly_payments": 407166,
+        "max_overdue_days_12m": 15,
+        "overdue_count_12m": 1,
+        "inquiries_3m": 3
+      },
+      "statement_profile": null
+    },
+    {
+      "inn": "773013246628",
+      "key": "decline_risk",
+      "expected_decision": "DECLINE",
+      "demo_request": {
+        "purpose": "working_capital",
+        "product_code": "EXPRESS",
+        "requested_amount": 1000000,
+        "term_months": 24
+      },
+      "egrul": {
+        "inn": "773013246628",
+        "ogrn": "181600834856867",
+        "name": "ИП Орлов Денис Андреевич (демо)",
+        "legal_form": "IP",
+        "status": "active",
+        "registration_date": "2022-08-10",
+        "okved_main": "49.41",
+        "industry": "transport",
+        "director": "Орлов Денис Андреевич (демо)",
+        "region": "Москва",
+        "business_age_months": 49
+      },
+      "fns": {
+        "tax_arrears": true,
+        "mass_address": false,
+        "director_changes_12m": 0,
+        "has_reporting": true,
+        "reporting": {
+          "year": 2025,
+          "annual_revenue": 9000000,
+          "net_margin": 0.02,
+          "revenue_trend": -0.2,
+          "revenue_volatility": 0.55
+        }
+      },
+      "bki": {
+        "consent_required": true,
+        "existing_debt": 6500000,
+        "existing_monthly_payments": 330823,
+        "max_overdue_days_12m": 75,
+        "overdue_count_12m": 4,
+        "inquiries_3m": 7
+      },
+      "statement_profile": null
+    },
+    {
+      "inn": "7718431119",
+      "key": "alternative_product",
+      "expected_decision": "ALTERNATIVE_PRODUCT",
+      "demo_request": {
+        "purpose": "expansion",
+        "product_code": "INVESTMENT",
+        "requested_amount": 4000000,
+        "term_months": 36
+      },
+      "egrul": {
+        "inn": "7718431119",
+        "ogrn": "1023967588886",
+        "name": "ООО «Кофе Старт» (демо)",
+        "legal_form": "OOO",
+        "status": "active",
+        "registration_date": "2026-01-01",
+        "okved_main": "56.10",
+        "industry": "food",
+        "director": "Ли Вэй (демо)",
+        "region": "Москва",
+        "business_age_months": 9
+      },
+      "fns": {
+        "tax_arrears": false,
+        "mass_address": false,
+        "director_changes_12m": 0,
+        "has_reporting": true,
+        "reporting": {
+          "year": 2025,
+          "annual_revenue": 14000000,
+          "net_margin": 0.12,
+          "revenue_trend": 0.3,
+          "revenue_volatility": 0.2
+        }
+      },
+      "bki": {
+        "consent_required": true,
+        "existing_debt": 0,
+        "existing_monthly_payments": 0,
+        "max_overdue_days_12m": 0,
+        "overdue_count_12m": 0,
+        "inquiries_3m": 1
+      },
+      "statement_profile": null
+    }
+  ]
+}

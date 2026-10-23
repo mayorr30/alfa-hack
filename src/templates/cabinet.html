@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Альфа-Банк | Умный Кредитный Кабинет МСБ</title>
+    <!-- Подключаем Bootstrap 5 и иконки напрямую через надежные CDN -->
+    <link rel="stylesheet" href="https://jsdelivr.net">
+    <link rel="stylesheet" href="https://jsdelivr.net">
+    <style>
+        :root {
+            --alfa-red: #EF3124;
+            --alfa-black: #0B0F19;
+            --alfa-bg: #F3F4F6;
+        }
+        body {
+            background-color: var(--alfa-bg);
+            font-family: system-ui, -apple-system, sans-serif;
+            color: var(--alfa-black);
+        }
+        .navbar-alfa {
+            background-color: #FFFFFF;
+            border-bottom: 2px solid var(--alfa-red);
+        }
+        .card-custom {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            background: #FFFFFF;
+        }
+        .btn-alfa {
+            background-color: var(--alfa-red);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 10px 20px;
+            transition: all 0.2s;
+        }
+        .btn-alfa:hover {
+            background-color: #D32F2F;
+            color: white;
+            transform: translateY(-1px);
+        }
+        .badge-approved {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .badge-declined {
+            background-color: #FFEBEE;
+            color: #C62828;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .badge-processing {
+            background-color: #FFF3E0;
+            color: #EF6C00;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .clickable-row {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .clickable-row:hover {
+            background-color: #F9FAFB !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка в фирменном стиле Альфа-Банка -->
+    <nav class="navbar navbar-alfa navbar-light mb-5 py-3">
+        <div class="container">
+            <span class="navbar-brand d-flex align-items-center fw-bold text-dark fs-4">
+                <i class="bi bi-shield-check text-danger me-2 fs-3"></i> Альфа-Бизнес
+            </span>
+            <span class="badge bg-light text-dark border p-2">Коммерческий скоринг МСБ — MVP</span>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row g-4">
+
+            <!-- ЛЕВАЯ КОЛОНКА: ВВОД ДАННЫХ -->
+            <div class="col-lg-5">
+                <div class="card card-custom p-4">
+                    <h4 class="fw-bold mb-4 d-flex align-items-center">
+                        <i class="bi bi-file-earmark-text text-danger me-2"></i> Параметры запроса
+                    </h4>
+                    <form id="creditForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">ИНН организации или ИП</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-buildings"></i></span>
+                                <input type="text" id="inn" class="form-control" placeholder="Например, 773544899576" minlength="10" maxlength="12" required>
+                            </div>
+                            <div class="form-text">Используйте ИНН из data/companies.json для симуляции разных сценариев.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Сумма финансирования (₽)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-currency-ruble"></i></span>
+                                <input type="number" id="amount" class="form-control" placeholder="5000000" min="1" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Срок (месяцев)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-calendar3"></i></span>
+                                <input type="number" id="term" class="form-control" placeholder="24" min="1" required>
+                            </div>
+                        </div>
+                        <button type="submit" id="submitBtn" class="btn btn-alfa w-100 py-2.5">
+                            <span id="btnText">Запустить конвейер скоринга</span>
+                            <span id="btnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- ПРАВАЯ КОЛОНКА: ВЕРДИКТ НЕЙРОСЕТИ И АНАЛИТИКА -->
+            <div class="col-lg-7">
+                <!-- Карточка текущего вердикта -->
+                <div id="resultCard" class="card card-custom p-4 mb-4 d-none">
+                    <h4 class="fw-bold mb-3 d-flex align-items-center">
+                        <i class="bi bi-cpu text-danger me-2"></i> Вердикт нейросети
+                    </h4>
+                    <div class="p-3 border rounded mb-3 bg-light">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted">Решение скоринга:</span>
+                            <strong id="resStatus"></strong>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Кредитный рейтинг заемщика:</span>
+                            <span class="fw-bold fs-5" id="resScore"></span>
+                        </div>
+                    </div>
+
+                    <!-- Детализация причин отказа (reasons.py) -->
+                    <div id="reasonsBlock" class="alert alert-danger d-none p-3 border-0 rounded-3">
+                        <h6 class="fw-bold d-flex align-items-center"><i class="bi bi-exclamation-octagon-fill me-2"></i> Стоп-факторы заявки:</h6>
+                        <ul id="resReasons" class="mb-0 ps-3 small"></ul>
+                    </div>
+
+                    <!-- Умные товарные альтернативы (recommend.py) -->
+                    <div id="alternativesBlock" class="alert alert-success d-none p-3 border-0 rounded-3 mt-2">
+                        <h6 class="fw-bold d-flex align-items-center text-success"><i class="bi bi-lightning-charge-fill me-2"></i> Доступные альтернативы от Альфа-Банка:</h6>
+                        <div id="resAlternatives" class="small"></div>
+                    </div>
+                </div>
+
+                <!-- Кредитный портфель (История из БД) -->
+                <div class="card card-custom p-4">
+                    <h4 class="fw-bold mb-3 d-flex align-items-center">
+                        <i class="bi bi-clock-history text-danger me-2"></i> Портфель поданных заявок
+                    </h4>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Сумма (₽)</th>
+                                    <th>Срок</th>
+                                    <th>Статус</th>
+                                    <th>Балл</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">Введите ИНН и отправьте запрос для проверки истории портфеля</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Асинхронная JS оркестрация конвейера -->
+    <script>
+        async function fetchAnalyticsAndAlternatives(appId) {
+            try {
+                const rResp = await fetch(`/api/v1/applications/${appId}/reasons`);
+                const rData = await rResp.json();
+
+                const aResp = await fetch(`/api/v1/applications/${appId}/alternatives`);
+                const aData = await aResp.json();
+
+                const rBlock = document.getElementById('reasonsBlock');
+                const rList = document.getElementById('resReasons');
+                const aBlock = document.getElementById('alternativesBlock');
+                const aList = document.getElementById('resAlternatives');
+
+                rList.innerHTML = '';
+                aList.innerHTML = '';
+
+                if (rData.status === 'declined' || rData.detailed_reasons) {
+                    rBlock.classList.remove('d-none');
+                    rData.detailed_reasons.forEach(r => {
+                        const li = document.createElement('li');
+                        li.innerText = r;
+                        rList.appendChild(li);
+                    });
+                } else {
+                    rBlock.classList.add('d-none');
+                }
+
+                if (aData.alternative_offers && aData.alternative_offers.length > 0) {
+                    aBlock.classList.remove('d-none');
+                    aData.alternative_offers.forEach(alt => {
+                        const div = document.createElement('div');
+                        div.className = 'mb-2 p-2 border-start border-success border-3 bg-white rounded-2';
+                        div.innerHTML = `<strong>${alt.product_type}</strong>: ${alt.message} <br> Доступный лимит: <span class="text-success fw-bold">${alt.max_amount.toLocaleString()} ₽</span>`;
+                        aList.appendChild(div);
+                    });
+                } else {
+                    aBlock.classList.add('d-none');
+                }
+            } catch (e) { console.error("Ошибка сбора аналитики:", e); }
+        }
+
+        async function loadCompanyHistory(inn) {
+            try {
+                const response = await fetch(`/api/v1/applications/company/${inn}`);
+                const data = await response.json();
+                const tbody = document.getElementById('historyTableBody');
+                tbody.innerHTML = '';
+
+                if (data.history && data.history.length > 0) {
+                    data.history.forEach(app => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'clickable-row';
+                        tr.onclick = () => fetchAnalyticsAndAlternatives(app.application_id);
+
+                        let badge = `<span class="badge badge-processing">В обработке</span>`;
+                        if (app.status === 'approved') badge = `<span class="badge badge-approved">Одобрено</span>`;
+                        if (app.status === 'declined') badge = `<span class="badge badge-declined">Отказ</span>`;
+
+                        tr.innerHTML = `
+                            <td><strong>#${app.application_id}</strong></td>
+                            <td>${app.amount.toLocaleString()}</td>
+                            <td>${app.term} мес.</td>
+                            <td>${badge}</td>
+                            <td><span class="fw-semibold text-secondary">${app.score || '-'}</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">История пуста</td></tr>';
+                }
+            } catch (e) { console.error("Ошибка загрузки истории:", e); }
+        }
+
+        document.getElementById('creditForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+
+            submitBtn.disabled = true;
+            btnText.innerText = 'Нейросеть вычисляет риски Альфа-Банка...';
+            btnSpinner.classList.remove('d-none');
+
+            const inn = document.getElementById('inn').value;
+            const payload = {
+                inn: inn,
+                amount: parseFloat(document.getElementById('amount').value),
+                term_months: parseInt(document.getElementById('term').value)
+            };
+
+            try {
+                const response = await fetch('/api/v1/applications/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                document.getElementById('resultCard').classList.remove('d-none');
+                const statusEl = document.getElementById('resStatus');
+                statusEl.innerText = data.status === 'approved' ? 'ОДОБРЕНО' : 'ОТКАЗ';
+                statusEl.className = data.status === 'approved' ? 'text-success fs-5 fw-bold' : 'text-danger fs-5 fw-bold';
+                document.getElementById('resScore').innerText = data.score + ' / 100';
+
+                await fetchAnalyticsAndAlternatives(data.application_id);
+                await loadCompanyHistory(inn);
+
+            } catch (error) {
+                alert("Ошибка обработки заявки конвейером скоринга");
+            } finally {
+                submitBtn.disabled = false;
+                btnText.innerText = 'Запустить конвейер скоринга';
+                btnSpinner.classList.add('d-none');
+            }
+        });
+    </script>
+</body>
+</html>

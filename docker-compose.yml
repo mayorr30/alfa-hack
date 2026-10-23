@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: alfa_postgres_db
+    environment:
+      POSTGRES_USER: alfa_user
+      POSTGRES_PASSWORD: alfa_password
+      POSTGRES_DB: alfa_credit_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
