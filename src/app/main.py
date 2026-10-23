@@ -13,6 +13,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import text
+from sqlalchemy.exc import DBAPIError
 
 from . import __version__, ml_client
 from .database import Base, SessionLocal, engine
@@ -76,6 +77,26 @@ async def not_found(_: Request, exc: NotFound):
     return _error(404, "not_found", str(exc))
 
 
+@app.exception_handler(DBAPIError)
+async def db_error(_: Request, exc: DBAPIError):
+    log.exception("Ошибка БД")
+    text_ = str(exc.orig) if exc.orig is not None else str(exc)
+    if "does not exist" in text_ or "UndefinedTable" in type(exc.orig).__name__ \
+            or "UndefinedColumn" in type(exc.orig).__name__:
+        msg = ("Схема базы данных устарела или таблиц нет. Выполните: alembic upgrade head. "
+               "Если в базе остались таблицы старой версии — удалите её: docker compose down -v")
+    else:
+        msg = "Ошибка базы данных"
+    return _error(500, "database_error", msg, f"{type(exc.orig).__name__}: {text_}"[:500])
+
+
+@app.exception_handler(Exception)
+async def unexpected_error(_: Request, exc: Exception):
+    log.exception("Необработанная ошибка")
+    return _error(500, "internal_error", "Внутренняя ошибка сервера",
+                  f"{type(exc).__name__}: {exc}"[:500])
+
+
 @app.exception_handler(RequestValidationError)
 async def validation_error(_: Request, exc: RequestValidationError):
     detail = [{"loc": e.get("loc"), "msg": e.get("msg")} for e in exc.errors()]
@@ -96,13 +117,21 @@ async def bank_page(request: Request):
 
 @app.get("/health", tags=["Служебное"], summary="Проверка БД и ML-модели")
 async def health():
-    db_ok = True
+    db_ok, schema_ok = True, True
     try:
         async with SessionLocal() as s:
             await s.execute(text("SELECT 1"))
+            try:
+                await s.execute(text("SELECT id, legal_form FROM companies LIMIT 1"))
+                await s.execute(text("SELECT id FROM applications LIMIT 1"))
+            except Exception:  # noqa: BLE001
+                schema_ok = False
     except Exception as e:  # noqa: BLE001
         log.warning("БД недоступна: %s", e)
-        db_ok = False
-    body = {"status": "ok" if db_ok else "degraded", "database": db_ok,
+        db_ok = schema_ok = False
+    ok = db_ok and schema_ok
+    body = {"status": "ok" if ok else "degraded", "database": db_ok, "schema": schema_ok,
             "ml_model": ml_client.model_version(), "service_version": __version__}
-    return JSONResponse(body, status_code=200 if db_ok else 503)
+    if db_ok and not schema_ok:
+        body["hint"] = "Таблиц нет или они от старой версии: alembic upgrade head (или docker compose down -v)"
+    return JSONResponse(body, status_code=200 if ok else 503)

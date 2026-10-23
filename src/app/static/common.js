@@ -43,6 +43,8 @@ function showError(el, err) {
   let text = err.message || String(err);
   if (Array.isArray(err.detail)) {
     text += ": " + err.detail.map((d) => d.msg).join("; ");
+  } else if (typeof err.detail === "string") {
+    text += ` (${err.detail})`;
   }
   el.textContent = text;
 }
